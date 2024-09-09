@@ -3,7 +3,7 @@ name: Java CI with Maven
 on: workflow_dispatch
 
 env:
-  IMAGE_NAME: img82022282
+  IMAGE_NAME: 82022282
 
 jobs:
   build:
@@ -40,8 +40,8 @@ jobs:
 
     - name: 'Build & Tag Image'
       run: |
-            docker build -t cepgbaseacr/${{ env.IMAGE_NAME }}:latest -f Dockerfile-maven .
-            docker tag cepgbaseacr/${{ env.IMAGE_NAME }}:latest ${{ secrets.STAPACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest
+            docker build -t ${{ secrets.BASEACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }} -f Dockerfile-maven .
+            docker tag ${{ secrets.BASEACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }} ${{ secrets.STAPACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
 
     - name: 'Push image'
       uses: azure/docker-login@v1
@@ -51,12 +51,12 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: |
-          docker push cepgbaseacr/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ secrets.STAPACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
 
     - name: Update Kubernetes resources
       run: |
           cd manifests/overlays/prod
-          kustomize edit set image cepgbaseacr/${{ env.IMAGE_NAME }}:latest
+          kustomize edit set image ${{ secrets.STAPACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.gen-version.outputs.VERSION }}
           cat kustomization.yaml
 
     - name: Commit files
