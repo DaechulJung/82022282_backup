@@ -7,14 +7,14 @@ spec:
   template:
     spec:
       containers:
-        - name: 82022282 
+        - name: "82022282" 
           command: ["java","-jar","/app.jar"]
           args: ["--spring.config.location=file:/config/application.yml"]
           volumeMounts:
           - mountPath: /mnt/82022282
             name: 82022282-volume
             readOnly: false
-            subPath: 82022282
+            subPath: "82022282"
           - mountPath: /config
             name: application-properties
             readOnly: true
