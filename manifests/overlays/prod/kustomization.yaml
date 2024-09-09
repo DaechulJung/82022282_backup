@@ -15,4 +15,4 @@ images:
 - name: cepgbaseacr.azurecr.io/82022282
   newTag: "202409091222"
 - name: cepgstapacr.azurecr.io/82022282
-  newTag: "202409091307"
+  newTag: "202409091339"
